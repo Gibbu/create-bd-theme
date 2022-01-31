@@ -1,0 +1,13 @@
+{
+  "name": "--THEMENAME",
+  "version": "1.0.0",
+  "description": "--DESCRIPTION",
+  "author": "--AUTHOR",
+  "scripts": {
+    "dev": "bd-scss dev",
+    "build": "bd-scss build"
+  },
+  "dependencies": {
+    "bd-scss": "^1.0.4"
+  }
+}
