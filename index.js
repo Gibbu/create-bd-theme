@@ -7,9 +7,11 @@ import path from 'path';
 import ncp from 'ncp';
 import {promisify} from 'util';
 import {execa} from 'execa';
+import {fileURLToPath} from 'url';
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const setFields = (filePath, answers) => {
 	try {
@@ -35,7 +37,7 @@ const createProject = async() => {
 		process.exit(1);
 	}
 
-	const templateDir = path.resolve(process.cwd(), './template');
+	const templateDir = path.resolve(__dirname, 'template');
 
 	try {
 		await access(templateDir, fs.constants.R_OK);
@@ -73,11 +75,11 @@ const createProject = async() => {
 	}
 
 	// Copy files and set values.
-	const dirPath = path.join(process.cwd(), folderName);
-	if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+	const destPath = path.join(process.cwd(), folderName);
+	if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
 
 	try {
-		await copy('./template', dirPath, {
+		await copy(`${__dirname}/template`, destPath, {
 			clobber: false
 		});
 	} catch (err) {
@@ -87,14 +89,14 @@ const createProject = async() => {
 
 	// Rename dist/THEMENAME.theme.css and set meta fields
 	const newName = `${answers.theme_name}.theme.css`;
-	fs.renameSync(path.join(dirPath, 'dist', 'THEMENAME.theme.css'), path.join(dirPath, 'dist', newName));
-	setFields([dirPath, 'dist', newName], answers);
+	fs.renameSync(path.join(destPath, 'dist', 'THEMENAME.theme.css'), path.join(destPath, 'dist', newName));
+	setFields([destPath, 'dist', newName], answers);
 
 	// Set meta fields in src/_theme.scss
-	setFields([dirPath, 'src', '_theme.scss'], answers);
+	setFields([destPath, 'src', '_theme.scss'], answers);
 
 	// Set package.json values
-	setFields([dirPath, 'package.json'], answers);
+	setFields([destPath, 'package.json'], answers);
 
 	console.log(
 		`\n${chalk.greenBright.bold('[DONE]')} Successfully created theme files.\n\n`

@@ -1,6 +1,6 @@
 {
   "name": "create-bd-theme",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "A CLI to create BetterDiscord themes.",
   "main": "src/index.js",
   "type": "module",
@@ -10,9 +10,7 @@
     "scss",
     "create-bd-theme"
   ],
-  "bin": {
-    "create-bd-theme": "src/index.js"
-  },
+  "bin": "index.js",
   "publishConfig": {
     "access": "public"
   },
