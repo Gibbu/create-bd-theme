@@ -65,15 +65,6 @@ const createProject = async() => {
 		}
 	]);
 
-	// Init Git
-	const result = await execa('git', ['init'], {
-		cwd: process.cwd()
-	})
-	if (result.failed) {
-		console.log(`\n${chalk.red.bold('[ERROR]')} Failed to initialize Git.\n`);
-		process.exit(1);
-	}
-
 	// Copy files and set values.
 	const destPath = path.join(process.cwd(), folderName);
 	if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
@@ -98,11 +89,20 @@ const createProject = async() => {
 	// Set package.json values
 	setFields([destPath, 'package.json'], answers);
 
+	// Init Git
+	const result = await execa('git', ['init'], {
+		cwd: path.join(process.cwd(), folderName),
+	})
+	if (result.failed) {
+		console.log(`\n${chalk.red.bold('[ERROR]')} Failed to initialize Git.\n`);
+		process.exit(1);
+	}
+
 	console.log(
 		`\n${chalk.greenBright.bold('[DONE]')} Successfully created theme files.\n\n`
 		+ `Run:\n`
-		+ ` - ${chalk.yellow(`\`cd ${folderName}\``)}\n`
-		+ ` - ${chalk.yellow(`\`npm install\``)}\n`
+		+ ` - ${chalk.yellowBright(`\`cd ${folderName}\``)}\n`
+		+ ` - ${chalk.yellowBright(`\`npm install\``)}\n`
 		+ 'to install dependencies.\n'
 	);
 	return true;
