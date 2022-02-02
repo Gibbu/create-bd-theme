@@ -2,7 +2,7 @@
   "name": "create-bd-theme",
   "version": "0.0.3",
   "description": "A CLI to create BetterDiscord themes.",
-  "main": "src/index.js",
+  "main": "index.js",
   "type": "module",
   "keywords": [
     "betterdiscord",
