@@ -27,6 +27,8 @@ const setFields = (filePath, answers) => {
 	}
 }
 
+const getArg = (arg) => process.argv.find(e => e.startsWith(`--${arg}`));
+
 const createProject = async() => {
 	const folderName = process.argv[2];
 	if (!folderName) {
@@ -39,6 +41,7 @@ const createProject = async() => {
 
 	const templateDir = path.resolve(__dirname, 'template');
 
+	// Check if allowed access
 	try {
 		await access(templateDir, fs.constants.R_OK);
 	} catch (err) {
@@ -46,7 +49,8 @@ const createProject = async() => {
 		process.exit(1);
 	}
 
-	const answers = await inq.prompt([
+	// Anwser questions about the theme
+	let questions = [
 		{
 			type: 'input',
 			name: 'theme_name',
@@ -63,7 +67,20 @@ const createProject = async() => {
 			name: 'github_name',
 			message: 'What is your Github name?'
 		}
-	]);
+	]
+
+	// Ask to initialize git repo if arg not passed
+	if (!getArg('git')) {
+		questions = [...questions, {
+			type: 'confirm',
+			name: 'git_init',
+			message: 'Would you like to initialize a Git repository?',
+			default: false
+		}]
+	}
+
+	const answers = await inq.prompt(questions);
+	const initGit = !!getArg('git') || answers.git_init;
 
 	// Copy files and set values.
 	const destPath = path.join(process.cwd(), folderName);
@@ -93,20 +110,22 @@ const createProject = async() => {
 	setFields([destPath, 'bd-scss.config.json'], answers);
 
 	// Init Git
-	const result = await execa('git', ['init'], {
-		cwd: path.join(process.cwd(), folderName),
-	})
-	if (result.failed) {
-		console.log(`\n${chalk.red.bold('[ERROR]')} Failed to initialize Git.\n`);
-		process.exit(1);
+	if (initGit) {
+		const result = await execa('git', ['init'], {
+			cwd: path.join(process.cwd(), folderName),
+		})
+		if (result.failed) {
+			console.log(`\n${chalk.red.bold('[ERROR]')} Failed to initialize Git.\n`);
+			process.exit(1);
+		}
 	}
 
 	console.log(
-		`\n${chalk.greenBright.bold('[DONE]')} Successfully created theme files.\n\n`
-		+ `Run:\n`
-		+ ` - ${chalk.yellowBright(`\`cd ${folderName}\``)}\n`
-		+ ` - ${chalk.yellowBright(`\`npm install\``)}\n`
-		+ 'to install dependencies.\n'
+		`\n${chalk.greenBright.bold('[DONE]')} Your theme is ready!\n\n`
+		+ `Next steps:\n`
+		+ ` 1. ${chalk.yellowBright(`cd ${folderName}`)}\n`
+		+ ` 2. ${chalk.yellowBright(`npm install`)}\n`
+		+ ` 3. ${chalk.yellowBright(`npm run dev`)}\n`
 	);
 	return true;
 }
