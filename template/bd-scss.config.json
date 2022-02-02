@@ -1,0 +1,17 @@
+{
+	"compiler": {
+		"prefix": true
+	},
+	"dev": [
+		{
+			"target": ["src", "main.scss"],
+			"output": "--THEMENAME.theme.css"
+		}
+	],
+	"build": [
+		{
+			"target": ["src", "main.scss"],
+			"output": ["dist", "--THEMENAME.css"]
+		}
+	]
+}

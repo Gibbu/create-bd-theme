@@ -1,7 +1,7 @@
 {
   "name": "create-bd-theme",
-  "version": "0.0.5",
-  "description": "A CLI to create BetterDiscord themes.",
+  "version": "0.0.6",
+  "description": "A CLI to scaffold BetterDiscord themes using SCSS.",
   "main": "index.js",
   "type": "module",
   "keywords": [
@@ -17,6 +17,10 @@
   "author": {
     "name": "Gibbu",
     "url": "https://gibbu.me"
+  },
+  "repository": {
+    "url": "https://github.com/Gibbu/create-bd-theme.git",
+    "type": "git"
   },
   "license": "MIT",
   "dependencies": {
