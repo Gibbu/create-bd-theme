@@ -17,7 +17,7 @@ npx create-bd-theme MyTheme [options]
 This will ask a series of questions such as: Theme name, Description, your GitHub name, and if you'd like it initalize a Git repository.  
 > Make sure your GitHub name is correct as the CLI will use that for the GitHub Pages `@import`.  
 
-> Providing the `--git` option will skip asking you to initialize a git repository.
+> Providing the `--git` option will initialize a git repo and skip asking you.
 
 Move into the newly created directory and install the dependency using:  
 
