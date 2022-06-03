@@ -24,6 +24,7 @@ const setFields = (filePath, answers) => {
 		file = file.replace(/--THEMENAME/g, answers.theme_name);
 		file = file.replace(/--DESCRIPTION/g, answers.theme_desc);
 		file = file.replace(/--AUTHOR/g, answers.github_name);
+		file = file.replace(/--VERSION/g, answers.version);
 
 		fs.writeFileSync(path.join(...filePath), file);
 	} catch (err) {
@@ -79,6 +80,12 @@ const createProject = async() => {
 			type: "input",
 			name: "github_name",
 			message: "What is your Github name?"
+		},
+		{
+			type: "input",
+			name: "version",
+			message: "What is the initial version?",
+			default: "1.0.0"
 		}
 	]
 
