@@ -113,8 +113,8 @@ const createProject = async() => {
 	fs.renameSync(path.join(destPath, "dist", "THEMENAME.theme.css"), path.join(destPath, "dist", newName));
 	setFields([destPath, "dist", newName], answers);
 
-	// Set meta fields in src/_theme.scss
-	setFields([destPath, "src", "_theme.scss"], answers);
+	// Set import url in src/core/_imports.scss
+	setFields([destPath, "src", "core", "_baseImport.scss"], answers);
 
 	// Set package.json values
 	setFields([destPath, "package.json"], answers);

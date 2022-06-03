@@ -1,17 +1,25 @@
 {
+	"meta": {
+		"name": "--THEMENAME",
+		"author": "--AUTHOR",
+		"version": "--VERSION",
+		"description": "--DESCRIPTION",
+		"source": "https://github.com/--AUTHOR/--THEMENAME"
+	},
 	"compiler": {
 		"prefix": true
 	},
-	"dev": [
-		{
-			"target": ["src", "main.scss"],
-			"output": "--THEMENAME.theme.css"
-		}
-	],
-	"build": [
-		{
-			"target": ["src", "main.scss"],
-			"output": ["dist", "--THEMENAME.css"]
-		}
-	]
+	"dist": {
+		"target": ["src", "dist.scss"],
+		"output": ["dist", "--THEMENAME.theme.css"]
+	},
+	"dev": {
+		"target": ["src", "dev.scss"],
+		"output": ["--THEMENAME.theme.css"]
+	},
+	"base": {
+		"target": ["src", "base.scss"],
+		"output": ["dist", "--THEMENAME.css"]
+	},
+	"addons": []
 }
