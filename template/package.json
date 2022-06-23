@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "--DESCRIPTION",
   "author": "--AUTHOR",
+  "type": "module",
   "scripts": {
     "dev": "bd-scss dev",
     "build": "bd-scss build"
   },
   "dependencies": {
-    "bd-scss": "^1.1.0"
+    "bd-scss": "^2.0.0"
   }
 }
