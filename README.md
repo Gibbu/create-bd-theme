@@ -12,14 +12,16 @@ Have [NPM](https://nodejs.org/en/) v5.2+ installed with NodeJS and then run the 
 npx create-bd-theme MyTheme [options]
 ```
 
+This will ask a series of questions such as: Theme name, Description, your GitHub name, and if you'd like it initalize a Git repository.
+
 <br>
 
-This will ask a series of questions such as: Theme name, Description, your GitHub name, and if you'd like it initalize a Git repository.  
 > Make sure your GitHub name is correct as the CLI will use that for the GitHub Pages `@import`.  
-
 > Providing the `--git` option will initialize a git repo and skip asking you.
 
-Move into the newly created directory and install the dependency using:  
+<br>
+
+Move into the newly created directory and install the dependency using:
 
 ```bash
 cd MyTheme
@@ -36,14 +38,14 @@ npm run dev
 npm run build
 ```
 
-The `dev` script will watch the file(s) specified in `bd-scss.config.json` `dev` array and autocompile them to your BetterDiscord themes folder.  
+The `dev` script will watch the file specified in the `bd-scss.config.js` `dev` option. If not provided it will default to `src/dev.scss`.  
+The `build` script will compile the `dist` and `base` options to generate the necessary files.
 
-The `build` script will compile the file(s) specified in `bd-scss.config.json` `build` array and compile them to the desired location relative to your project directory.
-> View [bd-scss](https://github.com/Gibbu/bd-scss) for more info.
+> **View [bd-scss](https://github.com/Gibbu/bd-scss) for more info.**
 
 <br>
 
 ## Deployment
 
 When you're ready to share your awesome theme, all you need to do is push the changes to your repository and enable GitHub pages to target the `deploy` branch.  
-GitHub actions will take care of the compiling of the SCSS. 
+GitHub actions will take care of the compiling of the SCSS.
