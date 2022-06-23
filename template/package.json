@@ -1,14 +1,14 @@
 {
-  "name": "--THEMENAME",
-  "version": "1.0.0",
-  "description": "--DESCRIPTION",
-  "author": "--AUTHOR",
-  "type": "module",
-  "scripts": {
-    "dev": "bd-scss dev",
-    "build": "bd-scss build"
-  },
-  "dependencies": {
-    "bd-scss": "^2.0.0"
-  }
+	"name": "--THEMENAME",
+	"version": "1.0.0",
+	"description": "--DESCRIPTION",
+	"author": "--AUTHOR",
+	"type": "module",
+	"scripts": {
+		"dev": "bd-scss dev",
+		"build": "bd-scss build"
+	},
+	"dependencies": {
+		"bd-scss": "^2.0.1"
+	}
 }
