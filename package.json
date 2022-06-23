@@ -1,37 +1,37 @@
 {
-  "name": "create-bd-theme",
-  "version": "0.1.0",
-  "description": "A CLI to scaffold BetterDiscord themes using SCSS.",
-  "main": "index.js",
-  "type": "module",
-  "keywords": [
-    "betterdiscord",
-    "themes",
-    "scss",
-    "create-bd-theme"
-  ],
-  "bin": "index.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "author": {
-    "name": "Gibbu",
-    "url": "https://gibbu.me"
-  },
-  "repository": {
-    "url": "https://github.com/Gibbu/create-bd-theme.git",
-    "type": "git"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "chalk": "^5.0.0",
-    "execa": "^6.0.0",
-    "inquirer": "^8.2.0",
-    "ncp": "^2.0.0"
-  },
-  "devDependencies": {
-    "@types/inquirer": "^8.2.0",
-    "@types/ncp": "^2.0.5",
-    "@types/node": "^17.0.13"
-  }
+	"name": "create-bd-theme",
+	"version": "0.1.1",
+	"description": "A CLI to scaffold BetterDiscord themes using SCSS.",
+	"main": "index.js",
+	"type": "module",
+	"keywords": [
+		"betterdiscord",
+		"themes",
+		"scss",
+		"create-bd-theme"
+	],
+	"bin": "index.js",
+	"publishConfig": {
+		"access": "public"
+	},
+	"author": {
+		"name": "Gibbu",
+		"url": "https://gibbu.me"
+	},
+	"repository": {
+		"url": "https://github.com/Gibbu/create-bd-theme.git",
+		"type": "git"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"chalk": "^5.0.0",
+		"execa": "^6.0.0",
+		"inquirer": "^8.2.0",
+		"ncp": "^2.0.0"
+	},
+	"devDependencies": {
+		"@types/inquirer": "^8.2.0",
+		"@types/ncp": "^2.0.5",
+		"@types/node": "^17.0.13"
+	}
 }
