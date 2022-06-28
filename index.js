@@ -121,6 +121,9 @@ const createProject = async () => {
 	// Set bd-scss.config.json values
 	setFields([destPath, 'bd-scss.config.js'], answers);
 
+	// Set README.md values
+	setFields([destPath, 'README.md'], answers);
+
 	// Init Git
 	if (initGit) {
 		const result = await execa('git', ['init'], {
