@@ -1,6 +1,6 @@
 {
 	"name": "create-bd-theme",
-	"version": "0.1.12",
+	"version": "0.1.13",
 	"description": "A CLI to scaffold BetterDiscord themes using SCSS.",
 	"main": "index.js",
 	"type": "module",

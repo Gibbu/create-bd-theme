@@ -115,9 +115,6 @@ const createProject = async () => {
 		process.exit(1);
 	}
 
-	// Set package.json values
-	setFields([destPath, 'package.json'], answers);
-
 	// Set bd-scss.config.json values
 	setFields([destPath, 'bd-scss.config.js'], answers);
 
