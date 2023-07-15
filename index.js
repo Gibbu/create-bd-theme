@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import inq from 'inquirer';
-import chalk from 'chalk';
+import { intro, outro, confirm, select, text, isCancel, cancel } from '@clack/prompts';
+import K from 'kleur';
 import fs from 'fs';
 import path from 'path';
 import ncp from 'ncp';
@@ -21,10 +21,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const setFields = (filePath, answers) => {
 	try {
 		let file = Buffer.from(fs.readFileSync(path.join(...filePath))).toString();
-		file = file.replace(/--THEMENAME/g, answers.theme_name);
-		file = file.replace(/--DESCRIPTION/g, answers.theme_desc);
-		file = file.replace(/--AUTHOR/g, answers.github_name);
-		file = file.replace(/--VERSION/g, answers.version);
+		file = file.replace(/--THEMENAME/g, answers.themeName);
+		file = file.replace(/--DESCRIPTION/g, answers.themeDescription);
+		file = file.replace(/--AUTHOR/g, answers.githubName);
+		file = file.replace(/--VERSION/g, answers.themeVersion);
 
 		fs.writeFileSync(path.join(...filePath), file);
 	} catch (err) {
@@ -42,84 +42,99 @@ const getArg = (arg) => {
 	return process.argv.find((e) => e.startsWith(`--${arg}`));
 };
 
+/**
+ * @param {string} value
+ * @retuns boolean
+ */
+const validateTextPrompt = (value) => {
+	if (value.length === 0) return 'This field is required!';
+};
+
+const canCancel = (value) => {
+	if (isCancel(value)) {
+		cancel('Operation cancelled.');
+		process.exit(0);
+	}
+};
+
 const createProject = async () => {
 	const folderName = process.argv[2];
 	if (!folderName) {
-		console.log(`\n${chalk.red.bold('[ERROR]')} You must provide a name for your new directory.\n` + '\t' + chalk.gray('npx create-bd-theme <directory name>') + '\n');
+		console.log(`\n${K.red().bold('[ERROR]')} You must provide a name for your new directory.\n` + '\t' + K.gray('npx create-bd-theme <directory name>') + '\n');
 		process.exit(1);
 	}
 
-	const templateDir = path.resolve(__dirname, 'template');
+	const templateDir = path.resolve(__dirname, 'templates');
+	let initGit = !!getArg('git');
 
 	// Check if allowed access
 	try {
 		await access(templateDir, fs.constants.R_OK);
 	} catch (err) {
-		console.error(chalk.red.bold(err));
+		console.error(K.red().bold(err));
 		process.exit(1);
 	}
 
-	// Anwser questions about the theme
-	/** @type {import("inquirer").Question[]} */
-	let questions = [
-		{
-			type: 'input',
-			name: 'theme_name',
-			message: 'What do you want your Theme to be called?',
-			default: folderName,
-		},
-		{
-			type: 'input',
-			name: 'theme_desc',
-			message: 'Give your theme a description:',
-		},
-		{
-			type: 'input',
-			name: 'github_name',
-			message: 'What is your Github name?',
-		},
-		{
-			type: 'input',
-			name: 'version',
-			message: 'What is the initial version?',
-			default: '1.0.0',
-		},
-	];
+	intro('create-bd-scss');
 
-	// Ask to initialize git repo if arg not passed
+	const themeName = await text({
+		message: 'What should we call your theme?',
+		placeholder: folderName,
+		defaultValue: folderName,
+	});
+	canCancel(themeName);
+
+	const themeDescription = await text({
+		message: 'Give your theme a description',
+		validate: validateTextPrompt,
+	});
+	canCancel(themeDescription);
+
+	const githubName = await text({
+		message: 'What is your Github name?',
+		placeholder: 'Make sure this is correct! This will be used for the GitHub pages remote link.',
+		validate: validateTextPrompt,
+	});
+	canCancel(githubName);
+
+	const themeVersion = await text({
+		message: 'What is the initial version of your theme?',
+		initialValue: '1.0.0',
+		validate: validateTextPrompt,
+	});
+	canCancel(themeVersion);
+
+	const template = await select({
+		message: 'Which template do you wish to use?',
+		options: [
+			{ value: 'simple', label: 'Simple', hint: 'This will give you the absolute basics to start a theme.' },
+			{ value: 'full', label: 'Full', hint: 'This will give a built theme structure for easier sorting.' },
+		],
+	});
 	if (!getArg('git')) {
-		questions = [
-			...questions,
-			{
-				type: 'confirm',
-				name: 'git_init',
-				message: 'Would you like to initialize a Git repository?',
-				default: false,
-			},
-		];
+		initGit = await confirm({
+			message: 'Would you like to initialize a Git repository?',
+		});
+		canCancel(initGit);
 	}
-
-	const answers = await inq.prompt(questions);
-	const initGit = !!getArg('git') || answers.git_init;
 
 	// Copy files and set values.
 	const destPath = path.join(process.cwd(), folderName);
 	if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
 
 	try {
-		await copy(`${__dirname}/template`, destPath, {
-			clobber: false,
-		});
+		await copy(`${__dirname}/templates/${template}`, destPath, { clobber: false });
+		await copy(`${__dirname}/templates/shared`, destPath, { clobber: false });
 	} catch (err) {
 		console.log(err);
 		process.exit(1);
 	}
 
 	// Set bd-scss.config.json values
-	setFields([destPath, 'bd-scss.config.js'], answers);
+	setFields([destPath, 'bd-scss.config.js'], { themeName, themeDescription, themeVersion, githubName });
 
 	// Set README.md values
-	setFields([destPath, 'README.md'], answers);
+	setFields([destPath, 'README.md'], { themeName, themeDescription, themeVersion, githubName });
 
 	// Init Git
 	if (initGit) {
@@ -127,18 +142,29 @@ const createProject = async () => {
 			cwd: path.join(process.cwd(), folderName),
 		});
 		if (result.failed) {
-			console.log(`\n${chalk.red.bold('[ERROR]')} Failed to initialize Git.\n`);
+			console.log(`\n${K.red().bold('[ERROR]')} Failed to initialize Git.\n`);
 			process.exit(1);
 		}
 	}
 
-	console.log(
-		`\n${chalk.greenBright.bold('[DONE]')} Your theme is ready!\n\n` +
-			`Next steps:\n` +
-			` 1. ${chalk.yellowBright(`cd ${folderName}`)}\n` +
-			` 2. ${chalk.yellowBright(`npm install`)}\n` +
-			` 3. ${chalk.yellowBright(`npm run dev`)}\n`
-	);
+	outro('Your theme is ready!');
+
+	console.log('Next steps:');
+	console.log(`  1. ${K.yellow(`cd ${folderName}`)}`);
+	console.log(`  2. ${K.yellow('npm install')}`);
+	console.log(`  3. ${K.yellow('npm run dev')}\n\n`);
+
+	if (template === 'full') {
+		console.log(`You've selected the full template. Each ${K.yellow('`_index.scss`')} file will describe what that folder is for.\n`);
+
+		console.log(`Here are some established themes to get an idea on how they structure their themes:`);
+		console.log(` - Fluent by Gibbu: ${K.blue('https://github.com/DiscordStyles/Fluent')}`);
+		console.log(` - Steam by Disease: ${K.blue('https://github.com/maenDisease/Steam')}`);
+		console.log(` - Virtual Boy by Riddim: ${K.blue('https://github.com/Riddim-GLiTCH/Virtual-Boy')}\n`);
+
+		console.log(`If you require further help, either ask in the BetterDiscord server or join my server: ${K.blue('https://discord.gg/ZHthyCw')}\n`);
+	}
+
 	return true;
 };
 
