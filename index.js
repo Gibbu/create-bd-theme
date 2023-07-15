@@ -64,12 +64,13 @@ const createProject = async () => {
 		process.exit(1);
 	}
 
-	const templateDir = path.resolve(__dirname, 'templates');
 	let initGit = !!getArg('git');
 
 	// Check if allowed access
 	try {
-		await access(templateDir, fs.constants.R_OK);
+		await access(path.resolve(__dirname, 'templates'), fs.constants.R_OK);
+		await access(path.resolve(__dirname, 'manager'), fs.constants.R_OK);
+		await access(path.resolve(__dirname, 'shared'), fs.constants.R_OK);
 	} catch (err) {
 		console.error(K.red().bold(err));
 		process.exit(1);
@@ -99,18 +100,29 @@ const createProject = async () => {
 
 	const themeVersion = await text({
 		message: 'What is the initial version of your theme?',
-		initialValue: '1.0.0',
-		validate: validateTextPrompt,
+		placeholder: '1.0.0',
+		defaultValue: '1.0.0',
 	});
 	canCancel(themeVersion);
 
 	const template = await select({
 		message: 'Which template do you wish to use?',
 		options: [
-			{ value: 'simple', label: 'Simple', hint: 'This will give you the absolute basics to start a theme.' },
-			{ value: 'full', label: 'Full', hint: 'This will give a built theme structure for easier sorting.' },
+			{ value: 'simple', label: 'Simple', hint: 'The absolute basics to start a theme' },
+			{ value: 'base', label: 'Base', hint: 'Simple with predefined folders to help you getting started' },
 		],
 	});
+	canCancel(template);
+
+	const pkgManager = await select({
+		message: 'Which package manager do you use?',
+		options: [
+			{ value: 'npm', label: 'NPM', hint: 'NPM is the default package manager that comes with NodeJS' },
+			{ value: 'pnpm', label: 'PNPM', hint: 'PNPM is a faster alternative to NPM' },
+		],
+	});
+	canCancel(pkgManager);
+
 	if (!getArg('git')) {
 		initGit = await confirm({
 			message: 'Would you like to initialize a Git repository?',
@@ -123,8 +135,9 @@ const createProject = async () => {
 	if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
 
 	try {
-		await copy(`${__dirname}/templates/${template}`, destPath, { clobber: false });
-		await copy(`${__dirname}/templates/shared`, destPath, { clobber: false });
+		await copy(path.resolve(__dirname, 'templates', template), destPath, { clobber: false });
+		await copy(path.resolve(__dirname, 'shared'), destPath, { clobber: false });
+		await copy(path.resolve(__dirname, 'manager', pkgManager), destPath, { clobber: false });
 	} catch (err) {
 		console.log(err);
 		process.exit(1);
@@ -151,11 +164,11 @@ const createProject = async () => {
 
 	console.log('Next steps:');
 	console.log(`  1. ${K.yellow(`cd ${folderName}`)}`);
-	console.log(`  2. ${K.yellow('npm install')}`);
-	console.log(`  3. ${K.yellow('npm run dev')}\n\n`);
+	console.log(`  2. ${K.yellow(`${pkgManager} install`)}`);
+	console.log(`  3. ${K.yellow(`${pkgManager}${pkgManager === 'npm' ? ' run' : ''} dev`)}\n\n`);
 
-	if (template === 'full') {
-		console.log(`You've selected the full template. Each ${K.yellow('`_index.scss`')} file will describe what that folder is for.\n`);
+	if (template === 'base') {
+		console.log(`You've selected the base template. Each ${K.yellow('`_index.scss`')} file will describe what that folder intended for.\n`);
 
 		console.log(`Here are some established themes to get an idea on how they structure their themes:`);
 		console.log(` - Fluent by Gibbu: ${K.blue('https://github.com/DiscordStyles/Fluent')}`);
