@@ -68,7 +68,7 @@ const createProject = async () => {
 
 	// Check if allowed access
 	try {
-		await access(path.resolve(__dirname, 'templates'), fs.constants.R_OK);
+		await access(path.resolve(__dirname, 'files'), fs.constants.R_OK);
 		await access(path.resolve(__dirname, 'manager'), fs.constants.R_OK);
 		await access(path.resolve(__dirname, 'shared'), fs.constants.R_OK);
 	} catch (err) {
@@ -105,20 +105,12 @@ const createProject = async () => {
 	});
 	canCancel(themeVersion);
 
-	const template = await select({
-		message: 'Which template do you wish to use?',
-		options: [
-			{ value: 'simple', label: 'Simple', hint: 'The absolute basics to start a theme' },
-			{ value: 'base', label: 'Base', hint: 'Simple with predefined folders to help you getting started' },
-		],
-	});
-	canCancel(template);
-
 	const pkgManager = await select({
 		message: 'Which package manager do you use?',
 		options: [
-			{ value: 'npm', label: 'NPM', hint: 'NPM is the default package manager that comes with NodeJS' },
+			{ value: 'bun', label: 'Bun', hint: 'Bun is a newer runtime that is a replacement to NodeJS AND NPM (highly recommended).' },
 			{ value: 'pnpm', label: 'PNPM', hint: 'PNPM is a faster alternative to NPM' },
+			{ value: 'npm', label: 'NPM', hint: 'NPM is the default package manager that comes with NodeJS' },
 		],
 	});
 	canCancel(pkgManager);
@@ -135,7 +127,7 @@ const createProject = async () => {
 	if (!fs.existsSync(destPath)) fs.mkdirSync(destPath);
 
 	try {
-		await copy(path.resolve(__dirname, 'templates', template), destPath, { clobber: false });
+		await copy(path.resolve(__dirname, 'files'), destPath, { clobber: false });
 		await copy(path.resolve(__dirname, 'shared'), destPath, { clobber: false });
 		await copy(path.resolve(__dirname, 'manager', pkgManager), destPath, { clobber: false });
 	} catch (err) {
@@ -166,17 +158,6 @@ const createProject = async () => {
 	console.log(`  1. ${K.yellow(`cd ${folderName}`)}`);
 	console.log(`  2. ${K.yellow(`${pkgManager} install`)}`);
 	console.log(`  3. ${K.yellow(`${pkgManager}${pkgManager === 'npm' ? ' run' : ''} dev`)}\n\n`);
-
-	if (template === 'base') {
-		console.log(`You've selected the base template. Each ${K.yellow('`_index.scss`')} file will describe what that folder intended for.\n`);
-
-		console.log(`Here are some established themes to get an idea on how they structure their themes:`);
-		console.log(` - Fluent by Gibbu: ${K.blue('https://github.com/DiscordStyles/Fluent')}`);
-		console.log(` - Steam by Disease: ${K.blue('https://github.com/maenDisease/Steam')}`);
-		console.log(` - Virtual Boy by Riddim: ${K.blue('https://github.com/Riddim-GLiTCH/Virtual-Boy')}\n`);
-
-		console.log(`If you require further help, either ask in the BetterDiscord server or join my server: ${K.blue('https://discord.gg/ZHthyCw')}\n`);
-	}
 
 	return true;
 };

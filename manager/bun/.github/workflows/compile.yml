@@ -1,0 +1,26 @@
+name: 'Compile SCSS'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: 'Build CSS'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout Repo'
+        uses: 'actions/checkout@v2'
+      - name: 'Install BUN'
+        uses: 'oven-sh/setup-bun@v2'
+      - name: 'Install of dependencies'
+        run: 'bun i'
+      - name: 'Run build script'
+        run: 'bun run build'
+      - name: 'Deploy'
+        uses: 'peaceiris/actions-gh-pages@v3'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: 'deploy'
+          publish_dir: './dist'
