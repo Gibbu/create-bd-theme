@@ -38,8 +38,8 @@ npm run dev
 npm run build
 ```
 
-The `dev` script will watch the file specified in the `bd-scss.config.js` `dev` option. If not provided it will default to `src/dev.scss`.  
-The `build` script will compile the `dist` and `base` options to generate the necessary files.
+The `dev` script will build the necessary files to your local development.
+the `build` script will build the necessary files to the `/dist` folder relative to the `package.json` (where you run the script from).
 
 > **View [bd-scss](https://github.com/Gibbu/bd-scss) for more info.**
 
