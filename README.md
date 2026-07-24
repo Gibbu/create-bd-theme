@@ -6,10 +6,10 @@ A CLI to scaffold BetterDiscord themes.
 
 ## Usage
 
-Have [NPM](https://nodejs.org/en/) v5.2+ installed with NodeJS and then run the following command:
+Have [BunJS](https://bun.com/docs/installation) v1.0 or above installed and then run the following command:
 
 ```bash
-npx create-bd-theme MyTheme [options]
+bunx create-bd-theme <directory name> [options]
 ```
 
 This will ask a series of questions such as: Theme name, Description, your GitHub name, and if you'd like it initalize a Git repository.

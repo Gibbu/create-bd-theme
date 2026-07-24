@@ -1,4 +1,4 @@
-name: 'Compile SCSS'
+name: 'Compile CSS'
 
 on:
   push:
@@ -12,14 +12,12 @@ jobs:
     steps:
       - name: 'Checkout Repo'
         uses: 'actions/checkout@v2'
-      - name: 'Setup NodeJS'
-        uses: 'actions/setup-node@v7'
-        with:
-          node-version: 16
-      - name: 'Clean install of dependencies'
-        run: 'npm ci'
+      - name: 'Install BUN'
+        uses: 'oven-sh/setup-bun@v2'
+      - name: 'Install of dependencies'
+        run: 'bun i'
       - name: 'Run build script'
-        run: 'npm run build'
+        run: 'bun run build'
       - name: 'Deploy'
         uses: 'peaceiris/actions-gh-pages@v3'
         with:
