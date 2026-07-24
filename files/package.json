@@ -6,6 +6,6 @@
 		"build": "bd-css build"
 	},
 	"dependencies": {
-		"bd-css": "^0.0.6"
+		"bd-css": "^0.0.7"
 	}
 }
