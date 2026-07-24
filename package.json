@@ -1,6 +1,6 @@
 {
 	"name": "create-bd-theme",
-	"version": "0.4.3",
+	"version": "0.4.4",
 	"description": "A CLI to scaffold BetterDiscord themes.",
 	"main": "index.js",
 	"type": "module",
@@ -23,6 +23,10 @@
 		"type": "git"
 	},
 	"license": "MIT",
+	"files": [
+		"files",
+		"files/.gitignore"
+	],
 	"dependencies": {
 		"@clack/prompts": "^1.7.0",
 		"execa": "^10.0.0",
