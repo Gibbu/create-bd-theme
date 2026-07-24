@@ -63,7 +63,7 @@ const createProject = async () => {
 		console.log(
 			`\n${K.red().bold('[ERROR]')} You must provide a name for your new directory.\n` +
 				'\t' +
-				K.gray('npx create-bd-theme <directory name>') +
+				K.gray('bunx create-bd-theme <directory name>') +
 				'\n',
 		);
 		process.exit(1);
@@ -147,8 +147,8 @@ const createProject = async () => {
 
 	console.log('Next steps:');
 	console.log(`  1. ${K.yellow(`cd ${folderName}`)}`);
-	console.log(`  2. ${K.yellow('npm install')}`);
-	console.log(`  3. ${K.yellow('npm run dev')}\n\n`);
+	console.log(`  2. ${K.yellow('bun install')}`);
+	console.log(`  3. ${K.yellow('bun dev')}\n\n`);
 
 	return true;
 };
