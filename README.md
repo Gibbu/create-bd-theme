@@ -47,9 +47,19 @@ The `build` script will compile the necessary files based off your `bd-css.confi
 
 ## Deployment
 
-When you're ready to share your awesome theme, all you need to do is push the changes to your repository and enable GitHub pages to target the `deploy` branch.
+When you're ready to share your awesome theme, there's a small step that is required:
 
-The resulting files will look along the lines of:
+- Enable write permissions for actions in your GitHub repoisitory.
+  - This can be found in: Repo Settings > Actions > General > Workflow Permissions > Enable "Read and write permissions"  
+    Without this setting enabled, GitHub will **not** compile your theme.
+
+With that setting enabled, push your changes to the `main` branch, wait for the action to complete, and enable Pages.
+
+You can enable Pages by going: Repo Settings > Pages > Branch > deploy > Save
+
+<br>
+
+The resulting files compiled by the action will look something like:
 
 > _CoolTheme.theme.css_
 
