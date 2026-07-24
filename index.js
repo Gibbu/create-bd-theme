@@ -28,7 +28,7 @@ const setFields = (filePath, answers) => {
 
 		fs.writeFileSync(path.join(...filePath), file);
 	} catch (err) {
-		console.log(`\n${chalk.red.bold('[ERROR]')}`, err);
+		console.log(`\n${K.red().bold('[ERROR]')}`, err);
 		process.exit(1);
 	}
 };
@@ -60,7 +60,12 @@ const canCancel = (value) => {
 const createProject = async () => {
 	const folderName = process.argv[2];
 	if (!folderName) {
-		console.log(`\n${K.red().bold('[ERROR]')} You must provide a name for your new directory.\n` + '\t' + K.gray('npx create-bd-theme <directory name>') + '\n');
+		console.log(
+			`\n${K.red().bold('[ERROR]')} You must provide a name for your new directory.\n` +
+				'\t' +
+				K.gray('npx create-bd-theme <directory name>') +
+				'\n',
+		);
 		process.exit(1);
 	}
 
@@ -69,14 +74,12 @@ const createProject = async () => {
 	// Check if allowed access
 	try {
 		await access(path.resolve(__dirname, 'files'), fs.constants.R_OK);
-		await access(path.resolve(__dirname, 'manager'), fs.constants.R_OK);
-		await access(path.resolve(__dirname, 'shared'), fs.constants.R_OK);
 	} catch (err) {
 		console.error(K.red().bold(err));
 		process.exit(1);
 	}
 
-	intro('create-bd-scss');
+	intro('create-bd-theme');
 
 	const themeName = await text({
 		message: 'What should we call your theme?',
@@ -105,16 +108,6 @@ const createProject = async () => {
 	});
 	canCancel(themeVersion);
 
-	const pkgManager = await select({
-		message: 'Which package manager do you use?',
-		options: [
-			{ value: 'bun', label: 'Bun', hint: 'Bun is a newer runtime that is a replacement to NodeJS AND NPM (highly recommended).' },
-			{ value: 'pnpm', label: 'PNPM', hint: 'PNPM is a faster alternative to NPM' },
-			{ value: 'npm', label: 'NPM', hint: 'NPM is the default package manager that comes with NodeJS' },
-		],
-	});
-	canCancel(pkgManager);
-
 	if (!getArg('git')) {
 		initGit = await confirm({
 			message: 'Would you like to initialize a Git repository?',
@@ -128,15 +121,13 @@ const createProject = async () => {
 
 	try {
 		await copy(path.resolve(__dirname, 'files'), destPath, { clobber: false });
-		await copy(path.resolve(__dirname, 'shared'), destPath, { clobber: false });
-		await copy(path.resolve(__dirname, 'manager', pkgManager), destPath, { clobber: false });
 	} catch (err) {
 		console.log(err);
 		process.exit(1);
 	}
 
-	// Set bd-scss.config.json values
-	setFields([destPath, 'bd-scss.config.js'], { themeName, themeDescription, themeVersion, githubName });
+	// Set bd-css.config.json values
+	setFields([destPath, 'bd-css.config.js'], { themeName, themeDescription, themeVersion, githubName });
 
 	// Set README.md values
 	setFields([destPath, 'README.md'], { themeName, themeDescription, themeVersion, githubName });
@@ -156,8 +147,8 @@ const createProject = async () => {
 
 	console.log('Next steps:');
 	console.log(`  1. ${K.yellow(`cd ${folderName}`)}`);
-	console.log(`  2. ${K.yellow(`${pkgManager} install`)}`);
-	console.log(`  3. ${K.yellow(`${pkgManager}${pkgManager === 'npm' ? ' run' : ''} dev`)}\n\n`);
+	console.log(`  2. ${K.yellow('npm install')}`);
+	console.log(`  3. ${K.yellow('npm run dev')}\n\n`);
 
 	return true;
 };

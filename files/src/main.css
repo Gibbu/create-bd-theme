@@ -1,0 +1,12 @@
+/* 
+	The file that all your CSS is located.
+	
+	You can also split your files and use the @import syntax.
+	Example: @import './theme/chat.css';
+
+	At build time, this will inline the /theme/chat.css contents directly into your main.css file.
+*/
+
+#app-mount .container__2637a {
+	background: var(--theme-variable);
+}

@@ -1,7 +1,7 @@
 {
 	"name": "create-bd-theme",
-	"version": "0.3.0",
-	"description": "A CLI to scaffold BetterDiscord themes using SCSS.",
+	"version": "0.4.0",
+	"description": "A CLI to scaffold BetterDiscord themes.",
 	"main": "index.js",
 	"type": "module",
 	"keywords": [
@@ -24,14 +24,14 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@clack/prompts": "^0.10.0",
-		"execa": "^9.5.2",
+		"@clack/prompts": "^1.7.0",
+		"execa": "^10.0.0",
 		"kleur": "^4.1.5",
 		"ncp": "^2.0.0"
 	},
 	"devDependencies": {
-		"@types/inquirer": "^9.0.7",
+		"@types/inquirer": "^9.0.10",
 		"@types/ncp": "^2.0.8",
-		"@types/node": "^22.13.14"
+		"@types/node": "^26.1.1"
 	}
 }

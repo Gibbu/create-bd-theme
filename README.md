@@ -1,6 +1,6 @@
 # create-bd-theme
 
-A CLI to scaffold BetterDiscord themes using SCSS.
+A CLI to scaffold BetterDiscord themes.
 
 <br>
 
@@ -38,14 +38,43 @@ npm run dev
 npm run build
 ```
 
-The `dev` script will build the necessary files to your local development.
-the `build` script will build the necessary files to the `/dist` folder relative to the `package.json` (where you run the script from).
+The `dev` script will watch the the `src` folder and compile them to your BetterDiscord themes folder.  
+The `build` script will compile the necessary files based off your `bd-css.config.js` config.
 
-> **View [bd-scss](https://github.com/Gibbu/bd-scss) for more info.**
+> **View [bd-css](https://github.com/Gibbu/bd-css) for more info.**
 
 <br>
 
 ## Deployment
 
-When you're ready to share your awesome theme, all you need to do is push the changes to your repository and enable GitHub pages to target the `deploy` branch.  
-GitHub actions will take care of the compiling of the SCSS.
+When you're ready to share your awesome theme, all you need to do is push the changes to your repository and enable GitHub pages to target the `deploy` branch.
+
+The resulting files will look along the lines of:
+
+> _CoolTheme.theme.css_
+
+```css
+/**
+ * @name CoolTheme
+ * @author CoolPerson
+ * @version 1.0.0
+ * @description My cool theme
+ * @source https://github.com/me/CoolTheme
+ */
+
+@import url('https://coolperson.github.io/CoolTheme/CoolTheme.css');
+
+:root {
+	--theme-variable: red;
+}
+```
+
+> _CoolTheme.css_
+
+```css
+#app-mount .container__2637a {
+	background: var(--theme-variable);
+}
+```
+
+Users will just need to download `CoolTheme.theme.css` and upon enabling the theme, Discord will fetch the `@import` contents.
